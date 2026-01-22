@@ -7,6 +7,7 @@ import com.vaxify.app.entities.User;
 import com.vaxify.app.entities.enums.HospitalStatus;
 import com.vaxify.app.entities.enums.Role;
 import com.vaxify.app.repository.HospitalRepository;
+import com.vaxify.app.repository.UserRepository;
 import com.vaxify.app.service.HospitalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -19,12 +20,18 @@ import java.time.LocalDateTime;
 public class HospitalServiceImpl implements HospitalService {
 
     private final HospitalRepository hospitalRepository;
+    private final UserRepository userRepository;
 
     @Override
     public HospitalResponse registerHospital(
             StaffHospitalRegisterRequest request,
-            User staffUser
+            String staffEmail
     ) {
+
+        User staffUser = userRepository.findByEmail(staffEmail)
+                .orElseThrow(() ->
+                        new IllegalStateException("Staff user not found")
+                );
 
         if (staffUser.getRole() != Role.STAFF) {
             throw new AccessDeniedException("Only hospital staff can register hospitals");
@@ -56,7 +63,12 @@ public class HospitalServiceImpl implements HospitalService {
     }
 
     @Override
-    public HospitalResponse getMyHospital(User staffUser) {
+    public HospitalResponse getMyHospital(String staffEmail) {
+
+        User staffUser = userRepository.findByEmail(staffEmail)
+                .orElseThrow(() ->
+                        new IllegalStateException("Staff user not found")
+                );
 
         Hospital hospital = hospitalRepository.findByStaffUser(staffUser)
                 .orElseThrow(() ->
