@@ -1,6 +1,6 @@
 package com.vaxify.app.dtos;
 
-import com.vaxify.app.entities.Role;
+import com.vaxify.app.entities.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
 

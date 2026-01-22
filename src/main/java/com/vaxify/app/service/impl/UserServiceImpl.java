@@ -3,7 +3,7 @@ package com.vaxify.app.service.impl;
 import com.vaxify.app.dtos.AuthResponse;
 import com.vaxify.app.dtos.LoginRequest;
 import com.vaxify.app.dtos.SignupRequest;
-import com.vaxify.app.entities.Role;
+import com.vaxify.app.entities.enums.Role;
 import com.vaxify.app.entities.User;
 import com.vaxify.app.mapper.UserMapper;
 import com.vaxify.app.repository.UserRepository;

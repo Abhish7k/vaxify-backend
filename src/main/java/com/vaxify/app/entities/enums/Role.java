@@ -1,4 +1,4 @@
-package com.vaxify.app.entities;
+package com.vaxify.app.entities.enums;
 
 public enum Role {
     USER,

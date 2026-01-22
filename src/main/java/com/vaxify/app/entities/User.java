@@ -1,5 +1,6 @@
 package com.vaxify.app.entities;
 
+import com.vaxify.app.entities.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
