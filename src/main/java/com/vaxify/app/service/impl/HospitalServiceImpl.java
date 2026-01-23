@@ -14,6 +14,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class HospitalServiceImpl implements HospitalService {
     private final HospitalRepository hospitalRepository;
     private final UserRepository userRepository;
 
+    // for staff
     @Override
     public HospitalResponse registerHospital(
             StaffHospitalRegisterRequest request,
@@ -82,4 +84,64 @@ public class HospitalServiceImpl implements HospitalService {
                 .status(hospital.getStatus())
                 .build();
     }
+
+    // for admin
+    @Override
+    public List<HospitalResponse> getAllHospitals() {
+        return hospitalRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @Override
+    public List<HospitalResponse> getPendingHospitals() {
+        return hospitalRepository.findByStatus(HospitalStatus.PENDING)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @Override
+    public HospitalResponse approveHospital(Long hospitalId) {
+
+        Hospital hospital = getPendingHospital(hospitalId);
+
+        hospital.setStatus(HospitalStatus.APPROVED);
+
+        return toResponse(hospitalRepository.save(hospital));
+
+    }
+
+    @Override
+    public HospitalResponse rejectHospital(Long hospitalId) {
+
+        Hospital hospital = getPendingHospital(hospitalId);
+
+        hospital.setStatus(HospitalStatus.REJECTED);
+
+        return toResponse(hospitalRepository.save(hospital));
+
+    }
+
+    // helpers
+    private Hospital getPendingHospital(Long id) {
+        Hospital hospital = hospitalRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Hospital not found"));
+
+        if (hospital.getStatus() != HospitalStatus.PENDING) {
+            throw new IllegalStateException("Hospital is not pending");
+        }
+        return hospital;
+    }
+
+    private HospitalResponse toResponse(Hospital hospital) {
+        return HospitalResponse.builder()
+                .id(hospital.getId())
+                .name(hospital.getName())
+                .address(hospital.getAddress())
+                .status(hospital.getStatus())
+                .build();
+    }
+
 }

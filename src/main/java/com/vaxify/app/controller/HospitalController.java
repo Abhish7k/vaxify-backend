@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/hospitals")
+@RequestMapping("/staff/hospitals")
 @RequiredArgsConstructor
 public class HospitalController {
 
