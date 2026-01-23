@@ -1,25 +1,28 @@
-# 🏥 Auth Backend Module - Local Setup Guide
+# 🏥 Vaxify – Backend
 
-## Prerequisites
+## 📦 Prerequisites
 
-- Java 17+
-- Maven
-- MySQL (running locally)
-- Postman or any API testing tool
+Before running this application, ensure you have:
+
+- Java 17 or higher
+- Maven 3.6+
+- MySQL 8.0+
+- Postman or any REST client (for testing)
 
 ---
 
-## Database Setup
+## 🚀 Getting Started
 
-### 1. Create Database
+### 1. Database Setup
 
-Login to MySQL and run:
+Login to MySQL and create the database:
 
 ```sql
-CREATE DATABASE vms_db;
+CREATE
+DATABASE vms_db;
 ```
 
-### 2. Configure Database Connection
+### 2. Configuration
 
 Edit `src/main/resources/application.properties`:
 
@@ -29,34 +32,38 @@ spring.datasource.username=root
 spring.datasource.password=YOUR_PASSWORD
 ```
 
-Replace `YOUR_PASSWORD` with your MySQL password.
+> **Note:** Replace `YOUR_PASSWORD` with your actual MySQL password.
 
----
+### 3. Running the Application
 
-## Running the Application
-
-### Using Terminal
+#### Using Terminal
 
 ```bash
 mvn clean install
 mvn spring-boot:run
 ```
 
-### Using IntelliJ IDEA
+#### Using IntelliJ IDEA
 
 1. Open the project
-2. Open `BackendApplication.java`
-3. Click **Run**
+2. Navigate to `BackendApplication.java`
+3. Click the **Run** button
 
-**✅ Application runs on:** `http://localhost:8080`
+The application will start at: **`http://localhost:8080`**
 
 ---
 
-## Testing the APIs
+## 📚 API Documentation
 
-### 1. Signup
+### Authentication APIs
 
-**POST** `http://localhost:8080/auth/signup`
+All authentication endpoints are publicly accessible.
+
+#### 1. Signup (USER / STAFF)
+
+**Endpoint:** `POST /auth/signup`
+
+**User Signup:**
 
 ```json
 {
@@ -67,9 +74,22 @@ mvn spring-boot:run
 }
 ```
 
-### 2. Login
+**Staff Signup:**
 
-**POST** `http://localhost:8080/auth/login`
+```json
+{
+  "name": "Staff User",
+  "email": "staff@test.com",
+  "password": "password123",
+  "role": "STAFF"
+}
+```
+
+#### 2. Login
+
+**Endpoint:** `POST /auth/login`
+
+**Request:**
 
 ```json
 {
@@ -92,30 +112,142 @@ mvn spring-boot:run
 }
 ```
 
-Copy the `token` value.
+> **Important:** Copy the `token` value and include it in all protected endpoints.
 
-### 3. Test Protected Endpoint
+---
 
-**GET** `http://localhost:8080/test`
+### 🔒 Authorization Header
 
-**Authorization Header:**
-
-```
-Authorization: Bearer <PASTE_TOKEN_HERE>
-```
-
-**Expected Response:**
+For all protected endpoints, include the JWT token:
 
 ```
-JWT is working!
+Authorization: Bearer <YOUR_TOKEN_HERE>
 ```
 
 ---
 
-## Quick Test Flow
+### 🧑‍⚕️ Staff Hospital APIs
 
-1. Create a user via signup
-2. Login with those credentials
-3. Copy the JWT token from response
-4. Add token to Authorization header
-5. Call the protected `/test` endpoint
+**Base Path:** `/staff/**`  
+**Required Role:** `STAFF`
+
+#### 1. Register Hospital
+
+**Endpoint:** `POST /staff/hospitals/register`
+
+**Request:**
+
+```json
+{
+  "name": "City Care Hospital",
+  "address": "Main Street, Downtown"
+}
+```
+
+**Response:**
+
+```json
+{
+  "id": 1,
+  "name": "City Care Hospital",
+  "address": "Main Street, Downtown",
+  "status": "PENDING"
+}
+```
+
+#### 2. View My Hospital
+
+**Endpoint:** `GET /staff/hospitals/me`
+
+**Response:**
+
+```json
+{
+  "id": 1,
+  "name": "City Care Hospital",
+  "address": "Main Street, Downtown",
+  "status": "PENDING"
+}
+```
+
+---
+
+### 🛡️ Admin Hospital APIs
+
+**Base Path:** `/admin/**`  
+**Required Role:** `ADMIN`
+
+#### 1. Get All Hospitals
+
+**Endpoint:** `GET /admin/hospitals`
+
+**Response:**
+
+```json
+[
+  {
+    "id": 1,
+    "name": "City Care Hospital",
+    "address": "Main Street, Downtown",
+    "status": "PENDING"
+  }
+]
+```
+
+#### 2. Get Pending Hospitals
+
+**Endpoint:** `GET /admin/hospitals/pending`
+
+#### 3. Approve Hospital
+
+**Endpoint:** `PUT /admin/hospitals/approve/{id}`
+
+**Example:**
+
+```
+PUT /admin/hospitals/approve/1
+```
+
+**Response:**
+
+```json
+{
+  "id": 1,
+  "name": "City Care Hospital",
+  "address": "Main Street, Downtown",
+  "status": "APPROVED"
+}
+```
+
+#### 4. Reject Hospital
+
+**Endpoint:** `PUT /admin/hospitals/reject/{id}`
+
+**Example:**
+
+```
+PUT /admin/hospitals/reject/1
+```
+
+---
+
+## 🔐 Security
+
+- **JWT-based** stateless authentication
+- **Role-based access control** enforced via `SecurityConfig`
+- **URL Access Rules:**
+    - `/auth/**` → Public (no authentication required)
+    - `/staff/**` → STAFF role only
+    - `/admin/**` → ADMIN role only
+
+---
+
+## ✅ Current Implementation
+
+- [x] User/Staff signup and login
+- [x] JWT authentication and authorization
+- [x] Hospital registration by Staff
+- [x] Hospital approval/rejection by Admin
+- [x] Role-based API access control
+- [x] Clean REST endpoint structure
+
