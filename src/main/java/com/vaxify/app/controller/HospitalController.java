@@ -10,23 +10,32 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import com.vaxify.app.dtos.StaffHospitalRegistrationDTO;
+import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("/staff/hospitals")
+@RequestMapping("/api/hospitals")
 @RequiredArgsConstructor
 public class HospitalController {
 
     private final HospitalService hospitalService;
 
+    // @PostMapping("/register")
+    // public HospitalResponse registerHospital(
+    //         @Valid @RequestBody StaffHospitalRegisterRequest request,
+    //         @AuthenticationPrincipal UserDetails principal
+    // ) {
+    //     return hospitalService.registerHospital(
+    //             request,
+    //             principal.getUsername() // email
+    //     );
+    // }
+
     @PostMapping("/register")
-    public HospitalResponse registerHospital(
-            @Valid @RequestBody StaffHospitalRegisterRequest request,
-            @AuthenticationPrincipal UserDetails principal
-    ) {
-        return hospitalService.registerHospital(
-                request,
-                principal.getUsername() // email
-        );
+    public ResponseEntity<String> registerHospitalStaff(@Valid @RequestBody StaffHospitalRegistrationDTO dto)
+    {
+        hospitalService.registerHospitalStaff(dto);
+        return ResponseEntity.ok("Hospital registration submitted for approval");
     }
 
 

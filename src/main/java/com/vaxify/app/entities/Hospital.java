@@ -19,11 +19,23 @@ public class Hospital {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "address", nullable = false)
     private String address;
+
+    @Column(name = "license_number", nullable = false)
+    private String licenseNumber;
+
+    @Column(name = "city")
+    private String city;
+
+     @Column(name = "state")
+    private String state;
+
+     @Column(name = "pincode")
+    private String pincode;
 
     // Hospital STAFF user
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,9 +43,9 @@ public class Hospital {
     private User staffUser;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false)
     private HospitalStatus status;
 
-    @Column(nullable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 }

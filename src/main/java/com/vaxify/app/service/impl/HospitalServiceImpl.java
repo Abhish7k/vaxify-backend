@@ -12,6 +12,9 @@ import com.vaxify.app.service.HospitalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import com.vaxify.app.dtos.StaffHospitalRegistrationDTO;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +25,7 @@ public class HospitalServiceImpl implements HospitalService {
 
     private final HospitalRepository hospitalRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // for staff
     @Override
@@ -142,6 +146,43 @@ public class HospitalServiceImpl implements HospitalService {
                 .address(hospital.getAddress())
                 .status(hospital.getStatus())
                 .build();
+    }
+
+    //regiter staff and hospital
+    @Override
+    @Transactional
+    public void registerHospitalStaff(StaffHospitalRegistrationDTO dto)
+    {
+        //check if email already exists
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already registered");
+        }
+
+        //create staff user
+        User staffUser = new User();
+        staffUser.setName(dto.getStaffName());
+        staffUser.setEmail(dto.getEmail());
+        staffUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+        staffUser.setRole(Role.STAFF);
+        staffUser.setCreatedAt(LocalDateTime.now());
+
+        userRepository.save(staffUser);
+
+        //create hospital
+        Hospital hospital = new Hospital();
+         hospital.setName(dto.getHospitalName());
+        hospital.setAddress(dto.getHospitalAddress());
+        hospital.setLicenseNumber(dto.getLicenseNumber());
+        hospital.setCity(dto.getCity());
+        hospital.setState(dto.getState());
+        hospital.setPincode(dto.getPincode());
+
+        hospital.setStaffUser(staffUser);
+        hospital.setStatus(HospitalStatus.PENDING);
+        hospital.setCreatedAt(LocalDateTime.now());
+
+        hospitalRepository.save(hospital);
+
     }
 
 }

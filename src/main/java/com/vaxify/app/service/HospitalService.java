@@ -1,5 +1,6 @@
 package com.vaxify.app.service;
 
+import com.vaxify.app.dtos.StaffHospitalRegistrationDTO;
 import com.vaxify.app.dtos.hospital.HospitalResponse;
 import com.vaxify.app.dtos.hospital.StaffHospitalRegisterRequest;
 
@@ -23,5 +24,8 @@ public interface HospitalService {
     HospitalResponse approveHospital(Long hospitalId);
 
     HospitalResponse rejectHospital(Long hospitalId);
+
+    // register hospital and staff
+    public void registerHospitalStaff(StaffHospitalRegistrationDTO dto);
 
 }

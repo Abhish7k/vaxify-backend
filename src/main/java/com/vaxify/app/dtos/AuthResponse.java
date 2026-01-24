@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 public class AuthResponse {
     private String token;
-    private UserDTO user;
+    private AuthDTO user;
 }
