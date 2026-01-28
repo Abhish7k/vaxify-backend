@@ -28,9 +28,6 @@ public class StaffHospitalRegistrationDTO {
     @NotBlank(message = "Hospital address is required")
     private String hospitalAddress;
 
-    @NotBlank(message = "Hospital registration number is required")
-    private String registrationNumber;
-
     @NotBlank(message = "Hospital license number is required")
     private String licenseNumber;
 

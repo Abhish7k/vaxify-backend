@@ -3,6 +3,7 @@ package com.vaxify.app.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,10 +26,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/hospitals/register").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/staff/**").hasRole("STAFF")
+                        .requestMatchers("/auth/**").permitAll()
+                        // ---------- SLOT MANAGEMENT ----------
+                        // STAFF can create / update / delete
+                        .requestMatchers("/api/slots/staff/**")
+                         .hasRole("STAFF")
+                        // USER, STAFF, ADMIN can view slots
+                        .requestMatchers(HttpMethod.GET, "/api/slots")
+                        .hasAnyRole("USER", "STAFF", "ADMIN")
                         .requestMatchers("/api/users/**").authenticated()
                         .requestMatchers("/appointments**").authenticated()
                         .anyRequest().authenticated()

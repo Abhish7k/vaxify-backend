@@ -40,7 +40,7 @@ public class Slot {
     private Long id;
 
     // Which center this slot belongs to
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)  
     @JoinColumn(name = "hospital_id", nullable = false)
     private Hospital center; 
 
