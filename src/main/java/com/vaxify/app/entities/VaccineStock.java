@@ -1,5 +1,7 @@
 package com.vaxify.app.entities;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,5 +42,7 @@ public class VaccineStock {
 
     @Column(nullable = false)
     private Long quantity;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
     
 }

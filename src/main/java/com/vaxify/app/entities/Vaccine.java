@@ -1,5 +1,7 @@
 package com.vaxify.app.entities;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +30,12 @@ public class Vaccine {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "type")
+    private String type;
+    
+    @Column(name = "manufacturer")
+    private String manufacturer;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
 }

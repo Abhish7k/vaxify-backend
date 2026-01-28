@@ -32,8 +32,14 @@ public class SecurityConfig {
                         // STAFF can create / update / delete
                         .requestMatchers("/api/slots/staff/**")
                          .hasRole("STAFF")
-                        // USER, STAFF, ADMIN can view slots
+                        // STAFF can create / update / delete
                         .requestMatchers(HttpMethod.GET, "/api/slots")
+                        .hasAnyRole("USER", "STAFF", "ADMIN")
+                        // ---------- VACCINE MANAGEMENT ----------
+                        // STAFF can create / update / delete
+                        .requestMatchers("/api/vaccines/staff/**").hasRole("STAFF")
+                        // STAFF can create / update / delete
+                        .requestMatchers(HttpMethod.GET, "/api/vaccines/**")
                         .hasAnyRole("USER", "STAFF", "ADMIN")
                         .requestMatchers("/api/users/**").authenticated()
                         .requestMatchers("/appointments**").authenticated()
