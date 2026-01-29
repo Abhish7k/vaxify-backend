@@ -33,3 +33,10 @@ build/
 .vscode/
 
 .metadata/
+
+# Local sensitive properties
+src/main/resources/application-local.properties
+src/main/resources/application-dev.properties
+
+# Logs
+*.log

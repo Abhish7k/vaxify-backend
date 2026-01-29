@@ -6,7 +6,6 @@ import com.vaxify.app.dtos.SignupRequest;
 import com.vaxify.app.service.AuthService;
 import com.vaxify.app.service.HospitalService;
 
-
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -33,6 +32,5 @@ public class AuthController {
     public AuthResponse login(@RequestBody LoginRequest request) {
         return authService.login(request);
     }
-
 
 }
